@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JavaScript Calculator</title>
+    <link rel="stylesheet" href="stylesheet.css" />
+    <script>
+      const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+      const operators = ["plus", "minus", "multiply", "divide"];
+      const allArr = [0];
+      const midArr = [];
+      let finArr = [];
+      let finNum = 0;
+      let num = 0;
+      let control = "";
+      function calculator(arr) {
+        if(numbers.indexOf(arr) > -1){
+          if(midArr[1] == undefined){
+            midArr.splice(0);
+          }
+          allArr.push(arr);
+          if(allArr[0] == "0" && allArr[1] != "."){
+            allArr.shift();
+          }
+          num = allArr.join("");
+          if(document.getElementById("display").innerText == finArr){
+            document.getElementById("total").innerText = finArr;
+            document.getElementById("display").innerText = num;
+          } else{
+            document.getElementById("display").innerText = num;
+          }
+        } else if(operators.indexOf(arr) > -1) {
+            if(midArr.length == 0){
+              midArr.push(num);
+              switch (arr) {
+                case "plus":
+                  midArr.push("+");
+                  break;
+                case "minus":
+                  midArr.push("-");
+                  break;
+                case "multiply":
+                  midArr.push("*");
+                  break;
+                case "divide":
+                  midArr.push("/");
+                  break;
+              }
+              finArr = midArr.join("");
+              allArr.splice(0);
+              allArr.push(0);
+              document.getElementById("display").innerText = allArr;
+              document.getElementById("total").innerText = finArr;
+              num = "";
+            } else if(midArr.length == 1){
+                switch (arr) {
+                  case "plus":
+                    midArr.push("+");
+                    break;
+                  case "minus":
+                    midArr.push("-");
+                    break;
+                  case "multiply":
+                    midArr.push("*");
+                    break;
+                  case "divide":
+                    midArr.push("/");
+                    break;
+                }
+                finArr = midArr.join("");
+                allArr.splice(0);
+                allArr.push(0);
+                document.getElementById("display").innerText = allArr;
+                document.getElementById("total").innerText = finArr;
+                num = "";
+            } else if(midArr.length == 2 && num != ""){
+                finNum = calculadora(midArr[0], num, midArr[1])
+                midArr.splice(0);
+                midArr.push(finNum);
+                switch (arr) {
+                  case "plus":
+                    midArr.push("+");
+                    break;
+                  case "minus":
+                    midArr.push("-");
+                    break;
+                  case "multiply":
+                    midArr.push("*");
+                    break;
+                  case "divide":
+                    midArr.push("/");
+                    break;
+                }
+                finArr = midArr.join("");
+                allArr.splice(0);
+                document.getElementById("display").innerText = finArr;
+                document.getElementById("total").innerText = allArr;
+                num = "";
+            } else if(midArr.length == 2 && num == "" && arr != "minus"){
+                midArr.pop();
+                switch (arr) {
+                  case "plus":
+                    midArr.push("+");
+                    break;
+                  case "minus":
+                    midArr.push("-");
+                    break;
+                  case "multiply":
+                    midArr.push("*");
+                    break;
+                  case "divide":
+                    midArr.push("/");
+                    break;
+                }
+                finArr = midArr.join("");
+                allArr.splice(0);
+                allArr.push(0);
+                document.getElementById("display").innerText = allArr;
+                document.getElementById("total").innerText = finArr;
+                num = "";
+            } else if(midArr.length == 2 && num == "" && arr == "minus"){
+                allArr.splice(0);
+                allArr.push("-");
+                finArr = midArr.join("");
+                document.getElementById("display").innerText = allArr;
+                document.getElementById("total").innerText = finArr;
+            }
+        } else if(arr == "point"){
+            if(allArr.every((value) => value != ".")){
+              allArr.push(".");
+              num = allArr.join("");
+              document.getElementById("display").innerText = num;
+            } else {
+              num = allArr.join("");
+              document.getElementById("display").innerText = num;
+            }
+        } else if (arr == "clear") {
+            allArr.splice(0);
+            allArr.push(0);
+            midArr.splice(0);
+            num = 0;
+            document.getElementById("total").innerText = midArr;
+            document.getElementById("display").innerText = allArr;
+        } else if(arr == "="){
+            finNum = calculadora(midArr[0], num, midArr[1])
+            midArr.splice(0);
+            midArr.push(finNum);
+            finArr = midArr.join("");
+            allArr.splice(0);
+            num = 0;
+            document.getElementById("display").innerText = finArr;
+            document.getElementById("total").innerText = allArr;
+        }
+      }
+      function calculadora(first, second, operador){
+        switch (operador) {
+          case '+':
+            return parseFloat(first) + parseFloat(second);
+            break;
+          case '-':
+            return parseFloat(first) - parseFloat(second);
+            break;
+          case '*':
+            return parseFloat(first) * parseFloat(second);
+            break;
+          case '/':
+            return parseFloat(first) / parseFloat(second);
+            break;
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="calculadora">
+      <div id="total"></div>
+      <div id="display">0</div>
+      <div id="botones">
+        <button class="button" id="clear" onClick="calculator('clear')">AC</button>
+        <button class="button" id="divide" onClick="calculator('divide')">/</button>
+        <button class="button" id="multiply" onClick="calculator('multiply')">x</button>
+        <button class="button" id="seven" onClick="calculator('7')">7</button>
+        <button class="button" id="eight" onClick="calculator('8')">8</button>
+        <button class="button" id="nine" onClick="calculator('9')">9</button>
+        <button class="button" id="subtract" onClick="calculator('minus')">-</button>
+        <button class="button" id="four" onClick="calculator('4')">4</button>
+        <button class="button" id="five" onClick="calculator('5')">5</button>
+        <button class="button" id="six" onClick="calculator('6')">6</button>
+        <button class="button" id="add" onClick="calculator('plus')">+</button>
+        <button class="button" id="one" onClick="calculator('1')">1</button>
+        <button class="button" id="two" onClick="calculator('2')">2</button>
+        <button class="button" id="three" onClick="calculator('3')">3</button>
+        <button class="button" id="zero" onClick="calculator('0')">0</button>
+        <button class="button" id="decimal" onClick="calculator('point')">.</button>
+        <button class="button" id="equals" onClick="calculator('=')">=</button>
+      </div>
+    </div>
+    <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+  </body>
+</html>
